@@ -10,20 +10,20 @@ exports.handler = async (event) => {
     const data = JSON.parse(event.body);
 
     const lead = {
-      // USER FIELDS
-      first_name: data.first_name || "",
-      last_name: data.last_name || "",
+      // ✅ MAPPED FROM YOUR EXACT IDS
+      first_name: data.name || "",
+      last_name: data.field_0969238 || "",
       email: data.email || "",
-      phone: data.phone || "",
-      program: data.program || "",
-      company: data.company || "",
-      experience: data.experience || "",
-      source: data.source || "",
-      message: data.message || "",
-      privacy: data.privacy || "",
-      consent: data.consent || "",
+      phone: data.field_f5b411a || "",
+      program: data.field_1b18630 || "",
+      company: data.field_71c5fb3 || "",
+      experience: data.field_126f704 || "",
+      source: data.field_09e142c || "",
+      message: data.field_9cc6a2c || "",
+      privacy: data.field_9e6682a || "",
+      consent: data.field_0ea1d66 || "",
 
-      // AUTO FIELDS
+      // ✅ AUTO FIELDS
       created_at: new Date().toLocaleString("en-IN", {
         timeZone: "Asia/Kolkata"
       }),
