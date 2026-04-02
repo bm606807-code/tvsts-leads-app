@@ -1,16 +1,14 @@
 exports.handler = async (event) => {
   try {
-    if (!event.body) {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ message: "API is working" })
-      };
+    let data = {};
+
+    try {
+      data = JSON.parse(event.body);
+    } catch {
+      data = {};
     }
 
-    const data = JSON.parse(event.body);
-
     const lead = {
-      // ✅ MAPPED FROM YOUR EXACT IDS
       first_name: data.name || "",
       last_name: data.field_0969238 || "",
       email: data.email || "",
@@ -23,7 +21,6 @@ exports.handler = async (event) => {
       privacy: data.field_9e6682a || "",
       consent: data.field_0ea1d66 || "",
 
-      // ✅ AUTO FIELDS
       created_at: new Date().toLocaleString("en-IN", {
         timeZone: "Asia/Kolkata"
       }),
@@ -35,10 +32,11 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(lead)
+      body: JSON.stringify({ success: true })
     };
 
   } catch (error) {
+    console.error(error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Something went wrong" })
