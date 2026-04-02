@@ -2,10 +2,12 @@ exports.handler = async (event) => {
   try {
     let data = {};
 
-    try {
+    // ✅ HANDLE ELEMENTOR FORM DATA
+    if (event.headers["content-type"]?.includes("application/json")) {
       data = JSON.parse(event.body);
-    } catch {
-      data = {};
+    } else {
+      const params = new URLSearchParams(event.body);
+      data = Object.fromEntries(params.entries());
     }
 
     const lead = {
@@ -36,7 +38,7 @@ exports.handler = async (event) => {
     };
 
   } catch (error) {
-    console.error(error);
+    console.error("ERROR:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Something went wrong" })
