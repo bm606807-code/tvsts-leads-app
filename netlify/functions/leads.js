@@ -2,13 +2,17 @@ exports.handler = async (event) => {
   try {
     let data = {};
 
-    // ✅ HANDLE ELEMENTOR FORM DATA
-    if (event.headers["content-type"]?.includes("application/json")) {
-      data = JSON.parse(event.body);
-    } else {
-      const params = new URLSearchParams(event.body);
-      data = Object.fromEntries(params.entries());
-    }
+    // Parse form data
+    const params = new URLSearchParams(event.body);
+
+    // Convert Elementor format → clean object
+    params.forEach((value, key) => {
+      // Example key: form_fields[name][value]
+      const match = key.match(/form_fields\[(.*?)\]\[value\]/);
+      if (match) {
+        data[match[1]] = value;
+      }
+    });
 
     const lead = {
       first_name: data.name || "",
