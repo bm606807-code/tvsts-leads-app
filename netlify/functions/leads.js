@@ -4,32 +4,31 @@ exports.handler = async (event) => {
 
     let data = {};
 
-    // Handle JSON (Elementor recommended)
-    if (event.body) {
-      const parsed = JSON.parse(event.body);
-      data = parsed.data || parsed;
-    }
+    // Handle URL-encoded (Elementor default)
+    const params = new URLSearchParams(event.body);
+
+    params.forEach((value, key) => {
+      data[key] = value;
+    });
 
     console.log("PARSED DATA:", data);
 
     const lead = {
-      first_name: data.name || "",
-      last_name: data.field_0969238 || "",
-      email: data.email || "",
-      phone: data.field_f5b411a || "",
-      program: data.field_1b18630 || "",
-      company: data.field_71c5fb3 || "",
-      experience: data.field_126f704 || "",
-      source: data.field_09e142c || "",
-      message: data.field_9cc6a2c || "",
-      privacy: data.field_9e6682a || "",
-      consent: data.field_0ea1d66 || "",
+      first_name: data["First Name"] || "",
+      last_name: data["Last Name"] || "",
+      email: data["Email"] || "",
+      phone: data["Mobile Number"] || "",
+      program: data["Select Program"] || "",
+      company: data["Company Name & Department"] || "",
+      experience: data["Years of Work Experience"] || "",
+      source: data["How did you know about this?"] || "",
+      message: data["Type your message here..."] || "",
+      privacy: data["Agreed to Privacy Policy"] || "",
+      consent: data["Agreed to TVS Training and Services"] || "",
 
-      created_at: new Date().toLocaleString("en-IN", {
-        timeZone: "Asia/Kolkata"
-      }),
-      form_name: "training_form",
-      referrer: event.headers.referer || ""
+      created_at: data["Date"] + " " + data["Time"] || "",
+      form_name: data["form_name"] || "",
+      referrer: data["Page URL"] || ""
     };
 
     console.log("FINAL LEAD:", lead);
@@ -43,8 +42,8 @@ exports.handler = async (event) => {
     console.error("ERROR:", error);
 
     return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Something went wrong" })
+      statusCode: 200, // IMPORTANT: avoid Elementor failure
+      body: JSON.stringify({ success: false })
     };
   }
 };
