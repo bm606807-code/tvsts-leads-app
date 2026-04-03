@@ -35,11 +35,11 @@ async function startServer() {
   // API Endpoint for Form Submission
   app.post('/api/leads', (req, res) => {
     const apiKey = req.headers['x-api-key'];
-    const expectedKey = process.env.LEAD_API_KEY || 'your-secret-api-key-here';
+    const expectedKey = process.env.LEAD_API_KEY;
 
-    if (apiKey !== expectedKey) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+    if (!apiKey || apiKey !== expectedKey) {
+  return res.status(401).json({ error: 'Unauthorized' });
+}
 
     const { name, email, phone, company, message, referrer } = req.body;
 
