@@ -14,35 +14,40 @@ exports.handler = async (event) => {
     console.log("PARSED DATA:", data);
 
     const lead = {
-      first_name: data["First Name"] || "",
-      last_name: data["Last Name"] || "",
+      name: (data["First Name"] || "") + " " + (data["Last Name"] || ""),
       email: data["Email"] || "",
       phone: data["Mobile Number"] || "",
-      program: data["Select Program"] || "",
       company: data["Company Name & Department"] || "",
-      experience: data["Years of Work Experience"] || "",
-      source: data["How did you know about this?"] || "",
       message: data["Type your message here..."] || "",
-      privacy: data["Agreed to Privacy Policy"] || "",
-      consent: data["Agreed to TVS Training and Services"] || "",
-
-      created_at: data["Date"] + " " + data["Time"] || "",
-      form_name: data["form_name"] || "",
-      referrer: data["Page URL"] || ""
+      referrer: data["Page URL"] || "",
+      category: "B2B" // you can customize later
     };
 
     console.log("FINAL LEAD:", lead);
 
+    // 🔥 SEND DATA TO YOUR DASHBOARD API
+    const response = await fetch("https://tvstsleadsnew.netlify.app/api/leads", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": process.env.API_KEY // safer
+      },
+      body: JSON.stringify(lead)
+    });
+
+    const result = await response.text();
+    console.log("API RESPONSE:", result);
+
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true, lead })
+      body: JSON.stringify({ success: true })
     };
 
   } catch (error) {
     console.error("ERROR:", error);
 
     return {
-      statusCode: 200, // IMPORTANT: avoid Elementor failure
+      statusCode: 200, // IMPORTANT for Elementor
       body: JSON.stringify({ success: false })
     };
   }
