@@ -66,7 +66,7 @@ export default function App() {
       const searchParam = search ? `search=${search}` : '';
       const query = [categoryParam, searchParam].filter(Boolean).join('&');
       
-      const response = await fetch(`/api/leads${query ? '?' + query : ''}`);
+      const response = await fetch(`fetch("fetch("fetch("fetch("/.netlify/functions/api-leads")")")")${query ? '?' + query : ''}`);
       const data = await response.json();
       setLeads(data);
     } catch (error) {
@@ -76,7 +76,7 @@ export default function App() {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('/api/stats');
+      const response = await fetch("/.netlify/functions/api-leads");
       const data = await response.json();
       setStats(data);
     } catch (error) {
@@ -239,7 +239,7 @@ export default function App() {
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase text-slate-400 tracking-wider">Webhook URL</label>
                       <div className="p-3 bg-slate-100 rounded-lg font-mono text-xs break-all border border-slate-200">
-                        {window.location.origin}/api/leads
+                        {window.location.origin}fetch("fetch("fetch("fetch("/.netlify/functions/api-leads")")")")
                       </div>
                     </div>
                     <div className="space-y-2">
@@ -252,7 +252,7 @@ export default function App() {
                   <div className="space-y-2">
                     <label className="text-xs font-bold uppercase text-slate-400 tracking-wider">Example Fetch Code</label>
                     <pre className="p-4 bg-slate-900 text-slate-300 rounded-lg font-mono text-xs overflow-x-auto">
-{`fetch("${window.location.origin}/api/leads", {
+{`fetch("${window.location.origin}fetch("fetch("fetch("fetch("/.netlify/functions/api-leads")")")")", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
