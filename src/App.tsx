@@ -245,7 +245,7 @@ export default function App() {
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase text-slate-400 tracking-wider">API Key (Header: x-api-key)</label>
                       <div className="p-3 bg-slate-100 rounded-lg font-mono text-xs break-all border border-slate-200">
-                        your-secret-api-key-here
+                        (Stored securely in backend)
                       </div>
                     </div>
                   </div>
