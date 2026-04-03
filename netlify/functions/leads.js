@@ -2,17 +2,25 @@ exports.handler = async (event) => {
   try {
     let data = {};
 
-    // Parse form data
-    const params = new URLSearchParams(event.body);
+    console.log("RAW BODY:", event.body);
 
-    // Convert Elementor format → clean object
-    params.forEach((value, key) => {
-      // Example key: form_fields[name][value]
-      const match = key.match(/form_fields\[(.*?)\]\[value\]/);
-      if (match) {
-        data[match[1]] = value;
-      }
-    });
+    // Detect format
+    if (event.headers["content-type"]?.includes("application/json")) {
+      const body = JSON.parse(event.body || "{}");
+      data = body.data || body;
+
+    } else {
+      const params = new URLSearchParams(event.body);
+
+      params.forEach((value, key) => {
+        const match = key.match(/form_fields\[(.*?)\]\[value\]/);
+        if (match) {
+          data[match[1]] = value;
+        }
+      });
+    }
+
+    console.log("PARSED DATA:", data);
 
     const lead = {
       first_name: data.name || "",
@@ -31,18 +39,19 @@ exports.handler = async (event) => {
         timeZone: "Asia/Kolkata"
       }),
       form_name: data.form_name || "training_form",
-      referrer: data.referrer || ""
+      referrer: event.headers.referer || ""
     };
 
-    console.log("Final Lead:", lead);
+    console.log("FINAL LEAD:", lead);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ success: true })
+      body: JSON.stringify({ success: true, lead })
     };
 
   } catch (error) {
     console.error("ERROR:", error);
+
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Something went wrong" })
