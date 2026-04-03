@@ -256,7 +256,6 @@ export default function App() {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
-    "x-api-key": "your-secret-api-key-here"
   },
   body: JSON.stringify({
     name: "John Doe",
