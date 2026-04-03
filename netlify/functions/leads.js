@@ -30,7 +30,7 @@ exports.handler = async (event) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": process.env.API_KEY // safer
+        "x-api-key": process.env.LEAD_API_KEY // safer
       },
       body: JSON.stringify(lead)
     });
