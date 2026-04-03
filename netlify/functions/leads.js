@@ -1,23 +1,13 @@
 exports.handler = async (event) => {
   try {
-    let data = {};
-
     console.log("RAW BODY:", event.body);
 
-    // Detect format
-    if (event.headers["content-type"]?.includes("application/json")) {
-      const body = JSON.parse(event.body || "{}");
-      data = body.data || body;
+    let data = {};
 
-    } else {
-      const params = new URLSearchParams(event.body);
-
-      params.forEach((value, key) => {
-        const match = key.match(/form_fields\[(.*?)\]\[value\]/);
-        if (match) {
-          data[match[1]] = value;
-        }
-      });
+    // Handle JSON (Elementor recommended)
+    if (event.body) {
+      const parsed = JSON.parse(event.body);
+      data = parsed.data || parsed;
     }
 
     console.log("PARSED DATA:", data);
@@ -38,7 +28,7 @@ exports.handler = async (event) => {
       created_at: new Date().toLocaleString("en-IN", {
         timeZone: "Asia/Kolkata"
       }),
-      form_name: data.form_name || "training_form",
+      form_name: "training_form",
       referrer: event.headers.referer || ""
     };
 
